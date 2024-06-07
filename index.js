@@ -97,6 +97,17 @@ try {
     const result = await favouriteCollection.deleteOne(query)
     res.send(result)
   })
+  // save a story to database
+  app.post('/success-stories', async(req, res) => {
+    const data = req.body
+    const result = await successStoryCollection.insertOne(data)
+    res.send(result)
+  })
+  // get all story from database
+  app.get('/success-stories', async(req, res) => {
+    const result = await successStoryCollection.find().toArray()
+    res.send(result)
+  })
 
   
   console.log("Pinged your deployment. You successfully connected to MongoDB!");
