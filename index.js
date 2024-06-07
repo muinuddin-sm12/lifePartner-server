@@ -34,36 +34,8 @@ try {
   const userCollection = client.db('lifePartnerDB').collection('users')
   const biodataCollection = client.db('lifePartnerDB').collection('biodatas')
   const favouriteCollection = client.db('lifePartnerDB').collection('favourites')
-  const idCollection = client.db('lifePartnerDB').collection('id')
-  
+  const successStoryCollection = client.db('lifePartnerDB').collection('stories')
 
-  app.post('/next-id', async (req, res) => {
-    try {
-        const result = await idCollection.findOneAndUpdate(
-            { _id: 'unique-id' },
-            { $inc: { id: 1 } },
-            { upsert: true, returnDocument: 'after' }
-        );
-        res.send({ nextId: result.value.id });
-    } catch (error) {
-        console.error('Error generating next ID:', error);
-        res.status(500).send('Error generating next ID');
-    }
-});
-
-app.get('/next-id', async (req, res) => {
-    try {
-        const result = await idCollection.findOne({ _id: 'unique-id' });
-        if (result) {
-            res.send({ currentId: result.id });
-        } else {
-            res.send({ currentId: 0 });
-        }
-    } catch (error) {
-        console.error('Error retrieving current ID:', error);
-        res.status(500).send('Error retrieving current ID');
-    }
-});
   // save an user in dataBase
   app.post('/users', async(req, res) => {
     const userData = req.body
@@ -77,8 +49,9 @@ app.get('/next-id', async (req, res) => {
   // save a biodata in dataBase
   app.post('/biodatas', async(req, res) => {
     const userData = req.body
-    // console.log(userData)
-    // userData.id = nextId;
+    const latestBiodata = await biodataCollection.find().sort({ id: -1 }).limit(1).toArray();
+    const nextId = latestBiodata.length > 0 ? latestBiodata[0].id + 1 : 1;
+    userData.id = nextId;
     const result = await biodataCollection.insertOne(userData)
     res.send(result)
   })
@@ -124,6 +97,7 @@ app.get('/next-id', async (req, res) => {
     const result = await favouriteCollection.deleteOne(query)
     res.send(result)
   })
+
   
   console.log("Pinged your deployment. You successfully connected to MongoDB!");
 } finally {
