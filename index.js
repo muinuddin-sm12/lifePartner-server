@@ -11,7 +11,7 @@ const corsOptions = {
     "http://localhost:5174",
     "https://life-partner-b9a12.web.app",
     "https://life-partner-b9a12.firebaseapp.com",
-    "https://life-partner-website.netlify.app/"
+    "https://life-partner-website.netlify.app"
   ],
   credentials: true,
   optionSuccessStatus: 200,
