@@ -8,10 +8,7 @@ const app = express();
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "http://localhost:5174",
     "https://life-partner-b9a12.web.app",
-    "https://life-partner-b9a12.firebaseapp.com",
-    "https://life-partner-website.netlify.app",
     "https://life-partner-client.vercel.app"
   ],
   credentials: true,
@@ -34,7 +31,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const userCollection = client.db("lifePartnerDB").collection("users");
     const biodataCollection = client.db("lifePartnerDB").collection("biodatas");
